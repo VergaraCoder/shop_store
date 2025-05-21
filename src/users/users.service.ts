@@ -1,26 +1,82 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { IUserService } from 'src/common/utils/interface/services/user.service.interface';
+import { User } from './entities/user.entity';
+import { Result } from 'src/common/utils/patternResult/patternResult';
+import { IUserRepository } from 'src/common/utils/interface/repo/user.repo.interface';
+import { CustomHttpException } from 'src/common/errors/error.custom';
 
 @Injectable()
-export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+export class UsersService implements IUserService {
+  constructor(
+    @Inject('USER_REPO')
+    private userRepo: IUserRepository,
+  ) {}
+  async create(data: CreateUserDto): Promise<User> {
+    try {
+      return await this.userRepo.create(data);
+    } catch (err: any) {
+      console.log(err);
+    }
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll(): Promise<Result<User[]>> {
+    const registers: User[] = await this.userRepo.findAll();
+    if (registers.length == 0) {
+      return {
+        data: null,
+        error: new CustomHttpException('THERE ARE NOT USERS', 404),
+      };
+    }
+    return {
+      data: registers,
+      error: null,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number): Promise<Result<User>> {
+    const register: User = await this.userRepo.findOne(id);
+    if (!register) {
+      return {
+        data: null,
+        error: new CustomHttpException('USER NOT FOUND', 404),
+      };
+    }
+    return {
+      data: register,
+      error: null,
+    };
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(
+    id: number,
+    dataUpdate: UpdateUserDto,
+  ): Promise<Result<boolean>> {
+    const result: boolean = await this.userRepo.update(id, dataUpdate);
+    if (!result) {
+      return {
+        data: null,
+        error: new CustomHttpException('USER NOT FOUND', 404),
+      };
+    }
+    return {
+      data: result,
+      error: null,
+    };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async delete(id: number): Promise<Result<boolean>> {
+    const result: boolean = await this.userRepo.delete(id);
+    if (!result) {
+      return {
+        data: null,
+        error: new CustomHttpException('USER NOT FOUND', 404),
+      };
+    }
+    return {
+      data: result,
+      error: null,
+    };
   }
 }
