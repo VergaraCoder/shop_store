@@ -5,6 +5,7 @@ import { CategoryModule } from './category/category.module';
 import { CategoryProductModule } from './category-product/category-product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DbConfig } from './common/db/db.config';
+import { ItemsGroupModule } from './items-group/items-group.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -14,6 +15,7 @@ import { DbConfig } from './common/db/db.config';
     ProductsModule,
     CategoryModule,
     CategoryProductModule,
+    ItemsGroupModule,
   ],
   controllers: [],
   providers: [],

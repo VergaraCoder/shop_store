@@ -1,5 +1,6 @@
 import { UserRole } from 'src/common/utils/enums/user.name.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ItemsGroup } from 'src/items-group/entities/items-group.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -20,4 +21,7 @@ export class User {
 
   @Column()
   password: string;
+
+  @OneToMany(() => ItemsGroup, (itemsGroup) => itemsGroup.user)
+  itemsGroup: ItemsGroup;
 }
