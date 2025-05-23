@@ -6,6 +6,7 @@ import { User } from './entities/user.entity';
 import { Result } from 'src/common/utils/patternResult/patternResult';
 import { IUserRepository } from 'src/common/utils/interface/repo/user.repo.interface';
 import { CustomHttpException } from 'src/common/errors/error.custom';
+import { USER_ERRORS } from './constant/user-error.contants';
 
 @Injectable()
 export class UsersService implements IUserService {
@@ -40,7 +41,7 @@ export class UsersService implements IUserService {
     if (!register) {
       return {
         data: null,
-        error: new CustomHttpException('USER NOT FOUND', 404),
+        error: new CustomHttpException(USER_ERRORS.NOT_FOUND, 404),
       };
     }
     return {
@@ -57,7 +58,7 @@ export class UsersService implements IUserService {
     if (!result) {
       return {
         data: null,
-        error: new CustomHttpException('USER NOT FOUND', 404),
+        error: new CustomHttpException(USER_ERRORS.NOT_FOUND, 404),
       };
     }
     return {
@@ -71,7 +72,7 @@ export class UsersService implements IUserService {
     if (!result) {
       return {
         data: null,
-        error: new CustomHttpException('USER NOT FOUND', 404),
+        error: new CustomHttpException(USER_ERRORS.NOT_FOUND, 404),
       };
     }
     return {

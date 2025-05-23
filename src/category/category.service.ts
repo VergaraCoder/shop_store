@@ -4,7 +4,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Result } from 'src/common/utils/patternResult/patternResult';
 import { CustomHttpException } from 'src/common/errors/error.custom';
 import { ICategoryRepository } from 'src/common/utils/interface/repo/category.repo.interface';
-import { Category } from './entities/category.entity';
+import { CategoryGroup } from './entities/category.entity';
 import { Symbol_Category } from 'src/common/utils/symbol/category.symbol';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class CategoryService {
     @Inject(Symbol_Category)
     private CategoryRepo: ICategoryRepository,
   ) {}
-  async create(data: CreateCategoryDto): Promise<Category> {
+  async create(data: CreateCategoryDto): Promise<CategoryGroup> {
     try {
       return await this.CategoryRepo.create(data);
     } catch (err: any) {
@@ -21,8 +21,8 @@ export class CategoryService {
     }
   }
 
-  async findAll(): Promise<Result<Category[]>> {
-    const registers: Category[] = await this.CategoryRepo.findAll();
+  async findAll(): Promise<Result<CategoryGroup[]>> {
+    const registers: CategoryGroup[] = await this.CategoryRepo.findAll();
     if (registers.length == 0) {
       return {
         data: null,
@@ -35,8 +35,8 @@ export class CategoryService {
     };
   }
 
-  async findOne(id: number): Promise<Result<Category>> {
-    const register: Category = await this.CategoryRepo.findOne(id);
+  async findOne(id: number): Promise<Result<CategoryGroup>> {
+    const register: CategoryGroup = await this.CategoryRepo.findOne(id);
     if (!register) {
       return {
         data: null,
